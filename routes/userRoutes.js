@@ -7,10 +7,10 @@ const userController = require("../controllers/userController");
 router.get("/", userController.user_list);
 
 // GET user create form
-router.get("/create", userController.user_create_get);
+router.get("/sign-up", userController.user_create_get);
 
 // POST request for creating user
-router.post("/create", userController.user_create_post);
+router.post("/sign-up", userController.user_create_post);
 
 // GET request to delete a user
 router.get("/:id/delete", userController.user_delete_get);
