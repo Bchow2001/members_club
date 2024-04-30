@@ -6,6 +6,12 @@ const userController = require("../controllers/userController");
 /* GET user list page */
 router.get("/", userController.user_list);
 
+// GET log in page
+router.get("/log-in", userController.user_log_in_get);
+
+// POST log in page
+router.post("/log-in", userController.user_log_in_post);
+
 // GET user create form
 router.get("/sign-up", userController.user_create_get);
 

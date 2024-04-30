@@ -8,6 +8,16 @@ exports.user_list = asyncHandler(async (req, res, next) => {
 	res.send("user list not implemented yet");
 });
 
+// Display Log in
+exports.user_log_in_get = asyncHandler(async (req, res, next) => {
+	res.send("Log in form not implemented yet");
+});
+
+// Handle log in on POST
+exports.user_log_in_post = asyncHandler(async (req, res, next) => {
+	res.send("Log in handle on post not implemented yet");
+});
+
 // Display details for a specific user
 exports.user_detail = asyncHandler(async (req, res, next) => {
 	res.send("User detail page not implemented yet");
