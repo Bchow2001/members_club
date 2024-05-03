@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%=title%></title>
+	</head>
+	<body>
+		<% extend("layout")%>
+		<h1>Messages:</h1>
+		<%if(messages){%>
+		<ul>
+			<%messages.forEach(function(message){%>
+			<li>
+				<h2>Title: <%=message.title%></h2>
+				<h3>Message:</h3>
+				<p><%=message.text%></p>
+				<p><%=message.time_stamp%></p>
+				<p><%=message.user.fullName%></p>
+			</li>
+		</ul>
+		<%})}else{%>
+		<p>There are no messages currently</p>
+		<a href="/messages/create">Write the first one!</a>
+		<%}%>
+	</body>
+</html>

@@ -4,48 +4,14 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
-const User = require("./models/user");
+require("./config/passport");
 
 const indexRouter = require("./routes/index");
 const messageRouter = require("./routes/messageRoutes");
 const userRouter = require("./routes/userRoutes");
-
-passport.use(
-	new LocalStrategy(async (username, password, done) => {
-		try {
-			const user = await User.findOne({ username });
-			if (!user) {
-				return done(null, false, { message: "Incorrect username" });
-			}
-			const match = await bcrypt.compare(password, user.password);
-			if (!match) {
-				// passwords do not match!
-				return done(null, false, { message: "Incorrect password" });
-			}
-			return done(null, user);
-		} catch (err) {
-			return done(err);
-		}
-	}),
-);
-
-passport.serializeUser((user, done) => {
-	done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-	try {
-		const user = await User.findById(id);
-		done(null, user);
-	} catch (err) {
-		done(err);
-	}
-});
 
 const app = express();
 

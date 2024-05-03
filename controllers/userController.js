@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 const Message = require("../models/message");
 const User = require("../models/user");
 
@@ -11,20 +12,29 @@ exports.user_list = asyncHandler(async (req, res, next) => {
 
 // Display Log in
 exports.user_log_in_get = asyncHandler(async (req, res, next) => {
-	res.send("Log in form not implemented yet");
+	res.render("log-in", {
+		title: "Log In",
+		errors: req.session.messages ? req.session.messages : null,
+	});
 });
 
 // Handle log in on POST
-exports.user_log_in_post = asyncHandler(async (req, res, next) => {
-	res.send("Log in handle on post not implemented yet");
-});
+exports.user_log_in_post = [
+	body("username").trim().escape(),
+	body("password").trim().escape(),
+	passport.authenticate("local", {
+		failureRedirect: "/users/log-in",
+		failureMessage: true,
+		successRedirect: "/messages",
+	}),
+];
 
 // Display details for a specific user
 exports.user_detail = asyncHandler(async (req, res, next) => {
 	res.send("User detail page not implemented yet");
 });
 
-// Display create user form on GET
+// Display sign-up on GET
 exports.user_create_get = asyncHandler(async (req, res, next) => {
 	res.render("sign-up", { title: "Sign-up", user: null, errors: null });
 });
@@ -99,13 +109,48 @@ exports.user_create_post = [
 					try {
 						user.password = hashedPassword;
 						const result = await user.save();
-						res.redirect("/");
+						res.redirect("/users/log-in");
 					} catch (err) {
 						return next(err);
 					}
 				}
 			});
 		}
+	}),
+];
+
+// Display secret Code page on GET
+exports.user_secret_get = asyncHandler(async (req, res, next) => {
+	if (req.isAuthenticated()) {
+		res.render("secret", { title: "Secret Code", messages: null });
+	} else {
+		res.redirect("/users/log-in");
+	}
+});
+
+// Handle Secret
+exports.user_secret_post = [
+	body("member_code").trim().escape(),
+	body("admin_code").trim().escape(),
+
+	asyncHandler(async (req, res, next) => {
+		if (req.isAuthenticated()) {
+			await Promise.all([
+				req.body.member_code === process.env.MEMBER_CODE
+					? User.findOneAndUpdate(
+							{ _id: req.user.id },
+							{ membership: true },
+					  )
+					: null,
+				req.body.admin_code === process.env.ADMIN_CODE
+					? User.findOneAndUpdate(
+							{ _id: req.user.id },
+							{ admin: true },
+					  )
+					: null,
+			]);
+		}
+		res.redirect("/users/log-in");
 	}),
 ];
 

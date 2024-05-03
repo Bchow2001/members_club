@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%=title%></title>
+	</head>
+	<body>
+		<% extend("layout")%>
+		<h1>Please log in</h1>
+		<form action="" method="POST">
+			<label for="username">Username</label>
+			<input name="username" placeholder="username" type="text" />
+			<label for="password">Password</label>
+			<input name="password" type="password" />
+			<button>Log In</button>
+		</form>
+		<%if(errors){%>
+		<ul>
+			<li><%=errors[errors.length-1]%></li>
+		</ul>
+		<%}%>
+	</body>
+</html>
