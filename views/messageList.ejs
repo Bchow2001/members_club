@@ -18,6 +18,10 @@
 				<%if(user.membership === true){%>
 				<p><%=message.time_stamp%></p>
 				<p><%=message.user.fullName%></p>
+				<%}%> <%if(user.admin === true){%>
+				<form action="/messages/<%=message._id%>/delete" method="post">
+					<button type="submit">Delete Message</button>
+				</form>
 				<%}%>
 			</li>
 		</ul>

@@ -9,9 +9,19 @@
 		<% extend("layout")%>
 		<h1>Users:</h1>
 		<%if(user.admin === true){%>
+		<p>
+			<strong>
+				Warning! Deleting a user will delete all associated messages.
+			</strong>
+		</p>
 		<ul>
 			<%allUsers.forEach(function(oneUser){%>
-			<li>Name: <%=oneUser.fullName%></li>
+			<li>
+				Name: <%=oneUser.fullName%>
+				<form action="/users/<%=oneUser._id%>/delete" method="post">
+					<button type="submit">Delete User</button>
+				</form>
+			</li>
 			<%})%>
 		</ul>
 		<%}else{%>

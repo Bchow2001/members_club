@@ -159,7 +159,7 @@ exports.user_secret_post = [
 					: null,
 			]);
 		}
-		res.redirect("/users/log-in");
+		res.redirect("/messages");
 	}),
 ];
 
@@ -173,22 +173,16 @@ exports.user_log_out = asyncHandler(async (req, res, next) => {
 	});
 });
 
-// Display user delete form on GET
-exports.user_delete_get = asyncHandler(async (req, res, next) => {
-	res.send("user delete get not implemented yet");
-});
-
 // Handle delete on POST
 exports.user_delete_post = asyncHandler(async (req, res, next) => {
-	res.send("user delete post not implemented yet");
-});
+	const user = await User.findById(req.params.id).exec();
 
-// Display user update form on GET
-exports.user_update_get = asyncHandler(async (req, res, next) => {
-	res.send("user update get not implemented yet");
-});
-
-// Handle user update on POST
-exports.user_update_post = asyncHandler(async (req, res, next) => {
-	res.send("user update post not implemented yet");
+	if (user === null) {
+		// No results.
+		res.redirect("/users");
+	} else {
+		await Message.deleteMany({ user: req.params.id });
+		await User.findByIdAndDelete(req.params.id);
+		res.redirect("/users");
+	}
 });

@@ -67,22 +67,15 @@ exports.message_create_post = [
 	}),
 ];
 
-// Display message delete form on GET
-exports.message_delete_get = asyncHandler(async (req, res, next) => {
-	res.send("Message delete get not implemented yet");
-});
-
 // Handle delete on POST
 exports.message_delete_post = asyncHandler(async (req, res, next) => {
-	res.send("Message delete post not implemented yet");
-});
+	const message = await Message.findById(req.params.id);
 
-// Display message update form on GET
-exports.message_update_get = asyncHandler(async (req, res, next) => {
-	res.send("Message update get not implemented yet");
-});
-
-// Handle message update on POST
-exports.message_update_post = asyncHandler(async (req, res, next) => {
-	res.send("Message update post not implemented yet");
+	if (message === null) {
+		// no results
+		res.redirect("/messages");
+	} else {
+		await Message.findByIdAndDelete(req.params.id);
+		res.redirect("/messages");
+	}
 });
