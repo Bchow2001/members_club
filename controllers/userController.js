@@ -7,7 +7,16 @@ const User = require("../models/user");
 
 // Display users list
 exports.user_list = asyncHandler(async (req, res, next) => {
-	res.send("user list not implemented yet");
+	if (req.isAuthenticated()) {
+		const [allUsers, user] = await Promise.all([
+			User.find().exec(),
+			req.user ? User.findOne({ _id: req.user.id }).exec() : null,
+		]);
+
+		res.render("userList", { title: "User List", allUsers, user });
+	} else {
+		res.redirect("/users/log-in");
+	}
 });
 
 // Display Log in
@@ -153,6 +162,16 @@ exports.user_secret_post = [
 		res.redirect("/users/log-in");
 	}),
 ];
+
+// Log out handle
+exports.user_log_out = asyncHandler(async (req, res, next) => {
+	req.logout((err) => {
+		if (err) {
+			return next(err);
+		}
+		res.redirect("/users/log-in");
+	});
+});
 
 // Display user delete form on GET
 exports.user_delete_get = asyncHandler(async (req, res, next) => {

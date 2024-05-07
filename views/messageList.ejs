@@ -8,20 +8,24 @@
 	<body>
 		<% extend("layout")%>
 		<h1>Messages:</h1>
-		<%if(messages){%>
+		<%if(currentUser){%> <%if(messages){%>
 		<ul>
 			<%messages.forEach(function(message){%>
 			<li>
 				<h2>Title: <%=message.title%></h2>
 				<h3>Message:</h3>
 				<p><%=message.text%></p>
+				<%if(user.membership === true){%>
 				<p><%=message.time_stamp%></p>
 				<p><%=message.user.fullName%></p>
+				<%}%>
 			</li>
 		</ul>
 		<%})}else{%>
 		<p>There are no messages currently</p>
 		<a href="/messages/create">Write the first one!</a>
+		<%}}else{%>
+		<p>Please log in to view messages.</p>
 		<%}%>
 	</body>
 </html>

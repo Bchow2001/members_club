@@ -12,6 +12,9 @@ router.get("/log-in", userController.user_log_in_get);
 // POST log in page
 router.post("/log-in", userController.user_log_in_post);
 
+// Get log out and handle
+router.get("/log-out", userController.user_log_out);
+
 // GET sign up form
 router.get("/sign-up", userController.user_create_get);
 

@@ -5,13 +5,17 @@ const User = require("../models/user");
 
 // Display Messages
 exports.message_list = asyncHandler(async (req, res, next) => {
-	const messages = await Message.find()
-		.sort({ time_stamp: -1 })
-		.limit(20)
-		.populate("user")
-		.exec();
+	const [messages, user] = await Promise.all([
+		Message.find()
+			.sort({ time_stamp: -1 })
+			.limit(20)
+			.populate("user")
+			.exec(),
 
-	res.render("messageList", { title: "Messages", messages });
+		req.user ? User.findOne({ _id: req.user.id }).exec() : null,
+	]);
+
+	res.render("messageList", { title: "Messages", messages, user });
 });
 
 // Display create message form on GET

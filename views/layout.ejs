@@ -16,6 +16,9 @@
 					<%if (!currentUser){%>
 					<li><a href="/users/log-in">Log In</a></li>
 					<li><a href="/users/sign-up">Sign up</a></li>
+					<%} else{%>
+					<li><a href="/messages/create">Add a new message</a></li>
+					<li><a href="/users/log-out">Log out</a></li>
 					<%}%>
 				</ul>
 			</div>
